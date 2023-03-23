@@ -2,6 +2,7 @@ package servlets;
 
 import java.io.IOException;
 
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -14,7 +15,6 @@ import model.LoginModel;
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-
     public LoginServlet() {
 
     }
@@ -27,9 +27,20 @@ public class LoginServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		LoginModel loginModel = new LoginModel(request.getParameter("login"), request.getParameter("pass"));
+		String login = request.getParameter("login");
+		String pass = request.getParameter("pass");
 		
-		System.out.println(loginModel);
+		if(login == null || login.isEmpty() || login.isBlank() ||pass == null || pass.isEmpty() || pass.isBlank()) {
+			RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
+			request.setAttribute("msg", "informe o Login e a Senha corretamente!");
+			rd.forward(request, response);
+			
+		} else {
+			LoginModel loginModel = new LoginModel(login, pass);
+			System.out.println(loginModel);
+		}
+		
+		
 	}
 
 }
